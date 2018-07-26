@@ -20,11 +20,11 @@ from sklearn.metrics import classification_report
 #names = ['Date', 'Open', 'High', 'Low', 'Close' 'Adj Close', 'Volume']
 
 dataset = pd.read_csv('market-data.csv')
+
 info = dataset.describe()
+print(info.round(2), '\n')
+print('Dimensions:', dataset.shape, '\n')
 
-print(dataset.columns.values.tolist())
-
-print(info.round(2))
 #scatter plot matrix
 sc = scatter_matrix(dataset)
 plt.show()
@@ -32,7 +32,8 @@ plt.show()
 #Split-out validation dataset
 array = dataset.values
 X = array[:,1:6]
-Y = array[:,4]
+Y = array[:,1]
+Y = Y.astype('int')
 validation_size = 0.20
 seed = 7
 X_train, X_validation, Y_train, Y_validation = model_selection.train_test_split(X,Y, test_size=validation_size, random_state=seed)
@@ -65,6 +66,6 @@ for name, model in models:
 knn = KNeighborsClassifier()
 knn.fit(X_train, Y_train)
 predictions = knn.predict(X_validation)
-print(accuracy_score(Y_validation, predictions))
-print(confusion_matrix(Y_validation, predictions))
+print('Accuracy Score:', accuracy_score(Y_validation, predictions), '\n')
+#print(confusion_matrix(Y_validation, predictions))
 print(classification_report(Y_validation, predictions))
